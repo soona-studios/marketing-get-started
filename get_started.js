@@ -580,15 +580,15 @@ document.addEventListener('DOMContentLoaded', async function () {
   awsWafIntegrationScript.src = "https://f56533acd8b9.us-west-1.captcha-sdk.awswaf.com/f56533acd8b9/jsapi.js";
   document.head.appendChild(sparkMD5Script);
   document.head.appendChild(awsWafIntegrationScript);
-  const observer = new MutationObserver((mutations, obs) => {
-    const removeBackgroundTabPane = document.getElementById('w-tabs-1-data-w-pane-0');
-    const changeBackgroundTabPane = document.getElementById('w-tabs-1-data-w-pane-1');
+  const tabsObserver = new MutationObserver((mutations, obs) => {
+    console.log('mutation observed');
     const imageResizerTabPane = document.getElementById('w-tabs-1-data-w-pane-2');
-    const removeBackgroundTab = document.getElementById('w-tabs-1-data-w-tab-0');
-    const changeBackgroundTab = document.getElementById('w-tabs-1-data-w-tab-1');
-    const imageResizerTab = document.getElementById('w-tabs-1-data-w-tab-2');
-    if (removeBackgroundTabPane && changeBackgroundTabPane && imageResizerTabPane && removeBackgroundTab && changeBackgroundTab && imageResizerTab) {
-      obs.disconnect();
+    if (imageResizerTabPane) {
+      const removeBackgroundTabPane = document.getElementById('w-tabs-1-data-w-pane-0');
+      const changeBackgroundTabPane = document.getElementById('w-tabs-1-data-w-pane-1');
+      const removeBackgroundTab = document.getElementById('w-tabs-1-data-w-tab-0');
+      const changeBackgroundTab = document.getElementById('w-tabs-1-data-w-tab-1');
+      const imageResizerTab = document.getElementById('w-tabs-1-data-w-tab-2');
       removeBackgroundTab.addEventListener('click', () => {
         linkClicked('tabs', 'remove background', null);
         resetVariables();
@@ -610,10 +610,11 @@ document.addEventListener('DOMContentLoaded', async function () {
       setUpEditingPane(removeBackgroundTabPane, 0);
       setUpEditingPane(changeBackgroundTabPane, 1);
       setUpForceToAppPane(imageResizerTabPane, 2);
+      obs.disconnect();
       return;
     }
   });
-  observer.observe(document, {
+  tabsObserver.observe(document, {
     childList: true,
     subtree: true
   });
