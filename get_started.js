@@ -378,15 +378,10 @@ const handleDrop = () => {
       alert('Please upload only one image');
       return;
     }
+    let fileField = fileFields[currentTab];
 
-    fileUploaded('main file uploader', files[0].type, files[0].size, files[0].height, files[0].width);
-
-    if (!['image/jpg', 'image/jpeg', 'image/png'].includes(files[0].type)) {
-      alert('Please use a valid image');
-      return;
-    }
-
-    readers[currentTab].readAsDataURL(files[0]);
+    fileField.files = files;
+    fileField.dispatchEvent(new Event('change'));
   }
 };
 
