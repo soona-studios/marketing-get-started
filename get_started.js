@@ -4,7 +4,6 @@ import { DigitalAsset } from "./digital_asset.js";
 // change base url depending on whether the page url includes 'local
 const baseUrl = 'https://book.soona.co';
 
-const reader = new FileReader();
 const colors = {
   transparent: null,
   pink: '#f2a1fd',
@@ -46,15 +45,16 @@ accountId.addValueListener(value => {
 
 
 // variables
-let fileFields = [],
-  imgEl = null,
+let fileFields = [null, null, null],
+  readers = [null, null, null],
+  imgEls = [null, null, null],
   originalImage = new Image(),
   authToken = null,
   digitalAsset = null,
   selectedColor = null,
   selectedButton = null,
-  imgSrc = null,
-  loadingSpinners = [],
+  imgSrcs = [null, null, null],
+  loadingSpinners = [null, null, null],
   currentTab = 0;
 
 // functions
@@ -137,7 +137,7 @@ async function createDigitalAsset() {
       resolve();
       return;
     }
-    let src = imgSrc ? imgSrc : imgEl.src;
+    let src = imgSrcs[currentTab] ? imgSrcs[currentTab] : imgEls[currentTab].src;
     const file = dataURLtoFile(src, fileFields[currentTab].files[0].name);
     digitalAsset = new DigitalAsset(file);
     await digitalAsset.create(accountId.get(), authToken, 'production');
@@ -173,8 +173,8 @@ function staticColorClickHandler(colorButton) {
     removeHideClass(loadingSpinners[currentTab]);
     requestCVImage(originalImage.src).then((result) => {
       if (result) {
-        imgEl.src = result;
-        imgEl.srcset = result;
+        imgEls[currentTab].src = result;
+        imgEls[currentTab].srcset = result;
       }
       addHideClass(loadingSpinners[currentTab]);
       if (selectedButton) removeHighlighted(selectedButton);
@@ -194,8 +194,8 @@ function addStyleListener(htmlElement) {
           removeHideClass(loadingSpinners[currentTab]);
           requestCVImage(originalImage.src).then((result) => {
             if (result) {
-              imgEl.src = result;
-              imgEl.srcset = result;
+              imgEls[currentTab].src = result;
+              imgEls[currentTab].srcset = result;
             }
             addHideClass(loadingSpinners[currentTab]);
             if (selectedButton){
@@ -227,11 +227,9 @@ function parseColorButtons(colorButtons, element) {
 }
 
 function resetVariables() {
-  imgEl = null;
   originalImage = new Image();
   selectedColor = null;
   selectedButton = null;
-  imgSrc = null;
 }
   
 // requests
@@ -386,7 +384,7 @@ const handleDrop = () => {
       return;
     }
 
-    reader.readAsDataURL(files[0]);
+    readers[currentTab].readAsDataURL(files[0]);
   }
 };
 
@@ -406,8 +404,9 @@ const removeIsOpen = el => el.classList.remove('is-open');
 
 //setup
 
-function setUpEditingPane(element) {
-  imgEl = element.getElementsByClassName('entry-point_display-image')[0];
+function setUpEditingPane(element, index) {
+  let imgEl = element.getElementsByClassName('entry-point_display-image')[0];
+  imgEls[index] = imgEl;
   imgEl.src = null;
   const dropUploadArea = element.getElementsByClassName('entry-point_file-upload-border')[0];
   const uploadWrapper = element.getElementsByClassName('entry-point_file-upload-content')[0];
@@ -421,11 +420,13 @@ function setUpEditingPane(element) {
   const colorSelectToolbarEl = element.getElementsByClassName('entry-point_color-select')[0];
   const imageSelectButtons = element.getElementsByClassName('entry-point_image-select_link');
   const loadingSpinner = element.getElementsByClassName('entry-point_lottie-wrap')[0];
-  loadingSpinners.push(loadingSpinner);
+  loadingSpinners[index] = loadingSpinner;
+  const reader = new FileReader();
+  readers[index] = reader;
 
   const fileField = element.getElementsByClassName('entry-point_file-upload-link')[0].children[0].children[0];
   fileField.accept = 'image/png, image/jpeg, image/jpg';
-  fileFields.push(fileField);
+  fileFields[index] = fileField;
   
 
   ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
@@ -524,15 +525,17 @@ function setUpEditingPane(element) {
   setColorFromURL();
 }
 
-function setUpForceToAppPane(element) {
+function setUpForceToAppPane(element, index) {
   const dropUploadArea = element.getElementsByClassName('entry-point_file-upload-border')[0];
   const loadingSpinner = document.getElementsByClassName('entry-point_lottie-wrap')[0];
-  loadingSpinners.push(loadingSpinner);
+  loadingSpinners[index] = loadingSpinner;
+  const reader = new FileReader();
+  readers[index] = reader;
 
   const fileField = element.getElementsByClassName('entry-point_file-upload-link')[0].children[0].children[0];
   fileField.accept = 'image/png, image/jpeg, image/jpg';
 
-  fileFields.push(fileField);
+  fileFields[index] = fileField;
   
 
   ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
@@ -563,18 +566,19 @@ function setUpForceToAppPane(element) {
   });
 
   reader.addEventListener('load', async () => {
-    imgSrc = reader.result;
+    imgSrcs[index] = reader.result;
     openAuthPortal();
   });
 }
 
-document.addEventListener('DOMContentLoaded', function () {
+document.addEventListener('DOMContentLoaded', async function () {
   const sparkMD5Script = document.createElement('script');
   const awsWafIntegrationScript = document.createElement('script');
   sparkMD5Script.src = 'https://cdnjs.cloudflare.com/ajax/libs/spark-md5/3.0.2/spark-md5.min.js';
   awsWafIntegrationScript.src = "https://f56533acd8b9.us-west-1.captcha-sdk.awswaf.com/f56533acd8b9/jsapi.js";
   document.head.appendChild(sparkMD5Script);
   document.head.appendChild(awsWafIntegrationScript);
+  await new Promise(r => setTimeout(r, 100));
   const removeBackgroundTab = document.getElementById('w-tabs-1-data-w-tab-0');
   const changeBackgroundTab = document.getElementById('w-tabs-1-data-w-tab-1');
   const imageResizerTab = document.getElementById('w-tabs-1-data-w-tab-2');
@@ -600,7 +604,7 @@ document.addEventListener('DOMContentLoaded', function () {
     currentTab = 2;
   });
 
-  setUpEditingPane(removeBackgroundTabPane);
-  setUpEditingPane(changeBackgroundTabPane);
-  setUpForceToAppPane(imageResizerTabPane);
+  setUpEditingPane(removeBackgroundTabPane, 0);
+  setUpEditingPane(changeBackgroundTabPane, 1);
+  setUpForceToAppPane(imageResizerTabPane, 2);
 });
