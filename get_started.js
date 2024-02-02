@@ -405,6 +405,7 @@ const removeIsOpen = el => el.classList.remove('is-open');
 //setup
 
 function setUpEditingPane(element, index) {
+  console.log('setting up editing pane');
   let imgEl = element.getElementsByClassName('entry-point_display-image')[0];
   imgEls[index] = imgEl;
   imgEl.src = null;
@@ -526,6 +527,7 @@ function setUpEditingPane(element, index) {
 }
 
 function setUpForceToAppPane(element, index) {
+  console.log('setting up force to app pane');
   const dropUploadArea = element.getElementsByClassName('entry-point_file-upload-border')[0];
   const loadingSpinner = document.getElementsByClassName('entry-point_lottie-wrap')[0];
   loadingSpinners[index] = loadingSpinner;
@@ -583,8 +585,8 @@ document.addEventListener('DOMContentLoaded', async function () {
     const changeBackgroundTabPane = document.getElementById('w-tabs-1-data-w-pane-1');
     const imageResizerTabPane = document.getElementById('w-tabs-1-data-w-pane-2');
     const removeBackgroundTab = document.getElementById('w-tabs-1-data-w-tab-0');
-  const changeBackgroundTab = document.getElementById('w-tabs-1-data-w-tab-1');
-  const imageResizerTab = document.getElementById('w-tabs-1-data-w-tab-2');
+    const changeBackgroundTab = document.getElementById('w-tabs-1-data-w-tab-1');
+    const imageResizerTab = document.getElementById('w-tabs-1-data-w-tab-2');
     if (removeBackgroundTabPane && changeBackgroundTabPane && imageResizerTabPane && removeBackgroundTab && changeBackgroundTab && imageResizerTab) {
       obs.disconnect();
       removeBackgroundTab.addEventListener('click', () => {
