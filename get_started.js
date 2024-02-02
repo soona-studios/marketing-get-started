@@ -379,6 +379,8 @@ const handleDrop = () => {
       return;
     }
 
+    fileUploaded('main file uploader', files[0].type, files[0].size, files[0].height, files[0].width);
+
     if (!['image/jpg', 'image/jpeg', 'image/png'].includes(files[0].type)) {
       alert('Please use a valid image');
       return;
@@ -405,7 +407,6 @@ const removeIsOpen = el => el.classList.remove('is-open');
 //setup
 
 function setUpEditingPane(element, index) {
-  console.log('setting up editing pane');
   let imgEl = element.getElementsByClassName('entry-point_display-image')[0];
   imgEls[index] = imgEl;
   imgEl.src = null;
@@ -443,7 +444,6 @@ function setUpEditingPane(element, index) {
   });
 
   dropUploadArea.addEventListener('drop', () => {
-    fileUploaded('main file uploader', fileField.files[0].type, fileField.files[0].size, imgEl.naturalHeight, imgEl.naturalWidth);
     handleDrop(fileField);
   }, false);
 
@@ -527,7 +527,6 @@ function setUpEditingPane(element, index) {
 }
 
 function setUpForceToAppPane(element, index) {
-  console.log('setting up force to app pane');
   const dropUploadArea = element.getElementsByClassName('entry-point_file-upload-border')[0];
   const loadingSpinner = document.getElementsByClassName('entry-point_lottie-wrap')[0];
   loadingSpinners[index] = loadingSpinner;
@@ -553,7 +552,6 @@ function setUpForceToAppPane(element, index) {
   });
 
   dropUploadArea.addEventListener('drop', () => {
-    fileUploaded('main file uploader', fileField.files[0].type, fileField.files[0].size, fileField.files[0].height, fileField.files[0].width);
     handleDrop(fileField);
   }, false);
 
