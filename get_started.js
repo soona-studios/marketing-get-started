@@ -443,9 +443,7 @@ function setUpEditingPane(element, index) {
     dropUploadArea.addEventListener(eventName, removeHighlight(dropUploadArea), false)
   });
 
-  dropUploadArea.addEventListener('drop', () => {
-    handleDrop(fileField);
-  }, false);
+  dropUploadArea.addEventListener('drop', handleDrop(fileField), false);
 
   mainCta.addEventListener('click', () => {
     linkClicked('toolbar', mainCta.innerText, null);
@@ -528,7 +526,7 @@ function setUpEditingPane(element, index) {
 
 function setUpForceToAppPane(element, index) {
   const dropUploadArea = element.getElementsByClassName('entry-point_file-upload-border')[0];
-  const loadingSpinner = document.getElementsByClassName('entry-point_lottie-wrap')[0];
+  const loadingSpinner = element.getElementsByClassName('entry-point_lottie-wrap')[0];
   loadingSpinners[index] = loadingSpinner;
   const reader = new FileReader();
   readers[index] = reader;
@@ -551,9 +549,7 @@ function setUpForceToAppPane(element, index) {
     dropUploadArea.addEventListener(eventName, removeHighlight(dropUploadArea), false)
   });
 
-  dropUploadArea.addEventListener('drop', () => {
-    handleDrop(fileField);
-  }, false);
+  dropUploadArea.addEventListener('drop', handleDrop(fileField), false);
 
   fileField.addEventListener('change', function () {
     if (fileField.value == '') { return; }
