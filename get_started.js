@@ -578,33 +578,41 @@ document.addEventListener('DOMContentLoaded', async function () {
   awsWafIntegrationScript.src = "https://f56533acd8b9.us-west-1.captcha-sdk.awswaf.com/f56533acd8b9/jsapi.js";
   document.head.appendChild(sparkMD5Script);
   document.head.appendChild(awsWafIntegrationScript);
-  await new Promise(r => setTimeout(r, 100));
-  const removeBackgroundTab = document.getElementById('w-tabs-1-data-w-tab-0');
+  const observer = new MutationObserver((mutations, obs) => {
+    const removeBackgroundTabPane = document.getElementById('w-tabs-1-data-w-pane-0');
+    const changeBackgroundTabPane = document.getElementById('w-tabs-1-data-w-pane-1');
+    const imageResizerTabPane = document.getElementById('w-tabs-1-data-w-pane-2');
+    const removeBackgroundTab = document.getElementById('w-tabs-1-data-w-tab-0');
   const changeBackgroundTab = document.getElementById('w-tabs-1-data-w-tab-1');
   const imageResizerTab = document.getElementById('w-tabs-1-data-w-tab-2');
-  const removeBackgroundTabPane = document.getElementById('w-tabs-1-data-w-pane-0');
-  const changeBackgroundTabPane = document.getElementById('w-tabs-1-data-w-pane-1');
-  const imageResizerTabPane = document.getElementById('w-tabs-1-data-w-pane-2');
-
-  removeBackgroundTab.addEventListener('click', () => {
-    linkClicked('tabs', 'remove background', null);
-    resetVariables();
-    currentTab = 0;
+    if (removeBackgroundTabPane && changeBackgroundTabPane && imageResizerTabPane && removeBackgroundTab && changeBackgroundTab && imageResizerTab) {
+      obs.disconnect();
+      removeBackgroundTab.addEventListener('click', () => {
+        linkClicked('tabs', 'remove background', null);
+        resetVariables();
+        currentTab = 0;
+      });
+    
+      changeBackgroundTab.addEventListener('click', () => {
+        linkClicked('tabs', 'change background', null);
+        resetVariables();
+        currentTab = 1;
+      });  
+    
+      imageResizerTab.addEventListener('click', () => {
+        linkClicked('tabs', 'image resizer', null);
+        resetVariables();
+        currentTab = 2;
+      });
+    
+      setUpEditingPane(removeBackgroundTabPane, 0);
+      setUpEditingPane(changeBackgroundTabPane, 1);
+      setUpForceToAppPane(imageResizerTabPane, 2);
+      return;
+    }
   });
-
-  changeBackgroundTab.addEventListener('click', () => {
-    linkClicked('tabs', 'change background', null);
-    resetVariables();
-    currentTab = 1;
-  });  
-
-  imageResizerTab.addEventListener('click', () => {
-    linkClicked('tabs', 'image resizer', null);
-    resetVariables();
-    currentTab = 2;
+  observer.observe(document, {
+    childList: true,
+    subtree: true
   });
-
-  setUpEditingPane(removeBackgroundTabPane, 0);
-  setUpEditingPane(changeBackgroundTabPane, 1);
-  setUpForceToAppPane(imageResizerTabPane, 2);
 });
