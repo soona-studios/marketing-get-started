@@ -569,7 +569,7 @@ document.addEventListener('DOMContentLoaded', async function () {
   awsWafIntegrationScript.src = "https://f56533acd8b9.us-west-1.captcha-sdk.awswaf.com/f56533acd8b9/jsapi.js";
   document.head.appendChild(sparkMD5Script);
   document.head.appendChild(awsWafIntegrationScript);
-  const mediaEditorPane = document.getElementsByClassName('tab-entry-point-hero')[0];
+  const mediaEditorPane = document.getElementsByClassName('get-started_tools-content')[0];
   const panes = mediaEditorPane.getElementsByClassName('w-tab-pane');
   const removeBackgroundPane = panes[0];
   const changeBackgroundPane = panes[1];
