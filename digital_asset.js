@@ -112,11 +112,12 @@ export class DigitalAsset {
         JSON.stringify({
           digital_asset: {
             title: this.file.name,
-            visibility: 0,
+            visibility: 2,
             origin: 1,
             origin_source: 1,
             ownership: 1,
             media_type: 0,
+            asset_type: 2,
             file: this.directUploadSignedId,
           },
         }),
