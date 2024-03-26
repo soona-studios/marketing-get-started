@@ -360,7 +360,7 @@ function openAuthPortal() {
   let popupWinHeight = 600;
   let left = window.screenX + (window.outerWidth - popupWinWidth) / 2;
   let top = window.screenY + (window.outerHeight - popupWinHeight) / 2;
-  let popUpUrl = `${baseUrl}/#/sign-up?isExternalAuthPortal=true&redirect=/sign-in%3FisExternalAuthPortal=true`;
+  let popUpUrl = `${baseUrl}/#/sign-up?account_creation_source=get_started&isExternalAuthPortal=true&redirect=/sign-in%3FisExternalAuthPortal=true`;
   let newWindow = window.open(popUpUrl,'google window','width='+popupWinWidth+',height='+popupWinHeight+',top='+top+',left='+left);
   newWindow.focus()
   // add event listener to receive message from auth portal
