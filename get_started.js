@@ -243,16 +243,15 @@ async function requestCVImage (base64File) {
 async function requestBackgroundChange (base64File, backgroundColor) {
   let processedBase64File = base64File.split(',')[0].indexOf('base64') >= 0 ? base64File.split(',')[1] : btoa(unescape(base64File.split(',')[1]));
   let imageRequest = {
-    input: [
-        {
-            "asset_id": "assets/cool-dog.jpg",
-            "image_base64": processedBase64File,
-            "mode": "color_shift",
-            "hex_color": backgroundColor,
-        },
-    ],
+    input: {
+      "image_base64": processedBase64File,
+    },
+    params: {
+      "mode": "color_shift",
+      "hex_color": backgroundColor,
+    }
   }; 
-  const resp = await AwsWafIntegration.fetch('https://cv-pub.ml.soona.co/v1/media-editor/background/replace',
+  const resp = await AwsWafIntegration.fetch('https://cv-pub.ml.soona.co/v2/sync/media-editor/background/replace',
             {
                 method: 'POST',
                 headers: {
@@ -270,7 +269,7 @@ async function requestBackgroundChange (base64File, backgroundColor) {
             });
   if (!resp) return;
   var result = await resp.json();
-  result = `data:image/jpg;base64,${result['assets'][0]['image_base64']}`;
+  result = `data:image/jpg;base64,${result['asset']['image_base64']}`;
   requestedImages[base64File + selectedColor] = result;
   return result;
 }
@@ -278,13 +277,12 @@ async function requestBackgroundChange (base64File, backgroundColor) {
 async function requestMaskedImage (base64File) {
   let processedBase64File = base64File.split(',')[0].indexOf('base64') >= 0 ? base64File.split(',')[1] : btoa(unescape(base64File.split(',')[1]));
   let imageRequest = {
-    input: [
+    input:
       {
         image_base64: processedBase64File
       },
-    ]
   }; 
-  const resp = await AwsWafIntegration.fetch('https://cv-pub.ml.soona.co/v1/media-editor/background/remove',
+  const resp = await AwsWafIntegration.fetch('https://cv-pub.ml.soona.co/v2/sync/media-editor/background/remove',
             {
                 method: 'POST',
                 headers: {
@@ -302,7 +300,7 @@ async function requestMaskedImage (base64File) {
             });
   if (!resp) return;
   var result = await resp.json();
-  result = `data:image/jpg;base64,${result['assets'][0]['image_base64']}`;
+  result = `data:image/jpg;base64,${result['asset']['image_base64']}`;
   requestedImages[base64File + selectedColor] = result;
   return result;
 }
