@@ -277,7 +277,7 @@ async function requestBackgroundChange (base64File, backgroundColor) {
 async function requestMaskedImage (base64File) {
   let processedBase64File = base64File.split(',')[0].indexOf('base64') >= 0 ? base64File.split(',')[1] : btoa(unescape(base64File.split(',')[1]));
   let imageRequest = {
-    input:{
+    input: {
       image_base64: processedBase64File
     },
   }; 
