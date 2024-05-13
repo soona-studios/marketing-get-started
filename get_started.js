@@ -277,10 +277,9 @@ async function requestBackgroundChange (base64File, backgroundColor) {
 async function requestMaskedImage (base64File) {
   let processedBase64File = base64File.split(',')[0].indexOf('base64') >= 0 ? base64File.split(',')[1] : btoa(unescape(base64File.split(',')[1]));
   let imageRequest = {
-    input:
-      {
-        image_base64: processedBase64File
-      },
+    input:{
+      image_base64: processedBase64File
+    },
   }; 
   const resp = await AwsWafIntegration.fetch('https://cv-pub.ml.soona.co/v2/sync/media-editor/background/remove',
             {
